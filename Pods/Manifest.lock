@@ -1,0 +1,28 @@
+PODS:
+  - IRPhotoGallery (1.0.0):
+    - IRPhotoGallery/IRPhotoGalleryB (= 1.0.0)
+    - SDWebImage (~> 4.0)
+  - IRPhotoGallery/IRPhotoGalleryB (1.0.0):
+    - SDWebImage (~> 4.0)
+  - SDWebImage (4.4.7):
+    - SDWebImage/Core (= 4.4.7)
+  - SDWebImage/Core (4.4.7)
+
+DEPENDENCIES:
+  - IRPhotoGallery (from `IRPhotoGallery/`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SDWebImage
+
+EXTERNAL SOURCES:
+  IRPhotoGallery:
+    :path: IRPhotoGallery/
+
+SPEC CHECKSUMS:
+  IRPhotoGallery: 9b589ec4a7cbcd293360e25247faa61d8fa2f6d0
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
+
+PODFILE CHECKSUM: 57710b455ab7619b635dc49b0d359b01c4b64960
+
+COCOAPODS: 1.7.1

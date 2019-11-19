@@ -1,0 +1,6 @@
+framework module IRPhotoGallery {
+  umbrella header "IRPhotoGallery-umbrella.h"
+
+  export *
+  module * { export * }
+}
