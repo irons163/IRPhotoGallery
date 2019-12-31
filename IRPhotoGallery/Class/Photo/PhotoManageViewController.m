@@ -7,16 +7,14 @@
 //
 
 #import "PhotoManageViewController.h"
-//#import "TGCameraViewController.h"
 #import "PhotoManageCollectionViewCell.h"
 #import "PhotoManageBrowser.h"
 #import "PhotoNoteViewController.h"
-#import "TGCameraViewController.h"
-#import "InventoryPhotoViewController.h"
-//#import "DataDefine.h"
+#import <IRCameraViewController/IRCameraViewController.h>
+#import "PhotoEditViewController.h"
+#import "PhotoGalleryViewController.h"
 
-@interface PhotoManageViewController () <TGCameraDelegate, PhotoManageBrowserDelegate, PhotoNoteViewControllerDelegate>{
-    NSMutableArray *photoURLArray, *photoNameArray;
+@interface PhotoManageViewController () <IRCameraDelegate, PhotoManageBrowserDelegate, PhotoNoteViewControllerDelegate, PhotoEditViewControllerDelegate>{
     __weak IBOutlet UIActivityIndicatorView *loadingIcon;
 }
 
@@ -35,22 +33,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.photoManageBrowser.delegate = self;
     [self.photoManageBrowser setStyle:Deletable];
     [self.photoManageBrowser setDirection:ScrollDirectionVertical];
     __weak PhotoManageViewController* wSelf = self;
     [self.photoManageBrowser setDeleteClickBlock:^(NSInteger index) {
-        [wSelf deleteImageWithImageIndex:index];
+        id object = [wSelf imageOrPathStringOfPhotoWithIndex:index];
+        [wSelf deleteImageWithImage:[object isKindOfClass:[UIImage class]] ? object : nil];
     }];
     [self.photoManageBrowser setEditClickBlock:^(NSInteger index) {
-        [wSelf editImageName];
+        NSString *title = [wSelf titleOfPhotoWithIndex:index];
+        id object = [wSelf imageOrPathStringOfPhotoWithIndex:index];
+        [wSelf editImageNameWithImage:[object isKindOfClass:[UIImage class]] ? object : nil Note:title];
     }];
-    photoURLArray = [NSMutableArray array];
-    photoNameArray = [NSMutableArray array];
-//    if(!_currentDevice.imagsArray){
-//        [self reloadInfo];
-//    }else{
-        [self reloadUI];
-//    }
+    self.itemSelectedBlock = self.itemSelectedBlock;
+    [self reloadUI];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,6 +57,21 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
+}
+
+- (void)setItemSelectedBlock:(ItemSelectedBlock)itemSelectedBlock {
+    _itemSelectedBlock = itemSelectedBlock;
+    __weak PhotoManageViewController* wSelf = self;
+    [self.photoManageBrowser setItemSelectedBlock:^(NSIndexPath *indexPath) {
+        if (wSelf.itemSelectedBlock) {
+            wSelf.itemSelectedBlock(indexPath);
+        } else {
+            PhotoGalleryViewController* photoGalleryViewController = [[PhotoGalleryViewController alloc] initWithNibName:@"PhotoGalleryViewController" bundle:[NSBundle bundleForClass:wSelf.class]];
+            photoGalleryViewController.delegate = wSelf;
+            photoGalleryViewController.imageIndex = indexPath.row;
+            [wSelf presentViewController:photoGalleryViewController animated:YES completion:nil];
+        }
+    }];
 }
 
 - (void)showLoading:(BOOL)isShow {
@@ -76,15 +88,16 @@
     });
 }
 
-- (void)deleteImageWithImageIndex:(NSInteger)index{
-    [self showLoading:YES];
-    //TODO: Delete
-    [self reloadInfo];
+- (void)deleteImageWithImage:(UIImage *)image {
+    if (_cameraDelegate && [_cameraDelegate respondsToSelector:@selector(doDeletePhoto:)]) {
+        [_cameraDelegate doDeletePhoto:image];
+    }
 }
 
-- (void)editImageName {
-    PhotoNoteViewController* noteViewController = [[PhotoNoteViewController alloc] init];
-//    noteViewController.currentImage = image;
+- (void)editImageNameWithImage:(UIImage *)image Note:(NSString *)note {
+    PhotoNoteViewController* noteViewController = [[PhotoNoteViewController alloc] initWithNibName:@"PhotoNoteViewController" bundle:[NSBundle bundleForClass:self.class]];
+    noteViewController.currentImage = image;
+    noteViewController.note = note;
     noteViewController.delegate = self;
     [self presentViewController:noteViewController animated:YES completion:nil];
 }
@@ -107,18 +120,6 @@
 
 - (void)reloadUI {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self->photoURLArray removeAllObjects];
-        [self->photoNameArray removeAllObjects];
-//        for(ImageClass* photo in self.currentDevice.imagsArray){
-//            [self->photoURLArray addObject:photo.downloadURL];
-//            [self->photoNameArray addObject:photo.imageDescription];
-//        }
-        if(self->photoURLArray.count >= 3)
-            self.addNewPhotoButton.enabled = NO;
-        else
-            self.addNewPhotoButton.enabled = YES;
-//        [self.photoManageBrowser bindArray:self->photoURLArray];
-//        [self.photoManageBrowser bindNameArray:self->photoNameArray];
         [self.photoManageBrowser reloadData];
     });
 }
@@ -138,55 +139,71 @@
 }
 
 - (IBAction)addNewPhotoButtonClick:(id)sender {
+    BOOL shouldOpenCamera = YES;
+    if (_cameraDelegate && [_cameraDelegate respondsToSelector:@selector(shouldOpenCamera)]) {
+        shouldOpenCamera = [_cameraDelegate shouldOpenCamera];
+    }
+    
+    if(!shouldOpenCamera)
+        return;
+    
     // set custom tint color
-    [TGCameraColor setTintColor: [UIColor whiteColor]];
+//    [IRCameraColor setTintColor: [UIColor whiteColor]];
     
     // save image to album
-    //[TGCamera setOption:kTGCameraOptionSaveImageToAlbum value:@YES];
+    //[IRCamera setOption:kIRCameraOptionSaveImageToAlbum value:@YES];
     
     // use the original image aspect instead of square
-    //[TGCamera setOption:kTGCameraOptionUseOriginalAspect value:@YES];
+    //[IRCamera setOption:kIRCameraOptionUseOriginalAspect value:@YES];
     
     // hide switch camera button
-    //[TGCamera setOption:kTGCameraOptionHiddenToggleButton value:@YES];
+    //[IRCamera setOption:kIRCameraOptionHiddenToggleButton value:@YES];
     
     // hide album button
-    //[TGCamera setOption:kTGCameraOptionHiddenAlbumButton value:@YES;
+    //[IRCamera setOption:kIRCameraOptionHiddenAlbumButton value:@YES;
     
     // hide filter button
-    [TGCamera setOption:kTGCameraOptionHiddenFilterButton value:@YES];
+//    [IRCamera setOption:kIRCameraOptionHiddenFilterButton value:@YES];
     
-    TGCameraNavigationController *cameraViewController = [TGCameraNavigationController newWithCameraDelegate:self];
+    if (_cameraDelegate && [_cameraDelegate respondsToSelector:@selector(willOpenCamera)]) {
+        [_cameraDelegate willOpenCamera];
+    }
+    
+    IRCameraNavigationController *cameraViewController = [IRCameraNavigationController newWithCameraDelegate:self];
     [self presentViewController:cameraViewController animated:YES completion:nil];
 }
 
-#pragma mark - TGCameraDelegate required
+#pragma mark - IRCameraDelegate required
 
 - (void)cameraDidCancel
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidTakePhoto:(UIImage *)image Note:(NSString *)note
-{
-//    [self presentPhotoEditPageWithImage:image];
+- (void)dealWithImage:(UIImage * _Nonnull)image {
+//    self.imageView.image = image;
     [self dismiss];
 }
 
-- (void)cameraDidSelectAlbumPhoto:(UIImage *)image Note:(NSString *)note
+- (void)cameraDidTakePhoto:(UIImage *)image
 {
-//    [self presentPhotoEditPageWithImage:image];
     [self dismiss];
+    [self presentPhotoEditPageWithImage:image];
+    [self reloadInfo];
+}
+
+- (void)cameraDidSelectAlbumPhoto:(UIImage *)image
+{
+    [self dismiss];
+    [self presentPhotoEditPageWithImage:image];
+    [self reloadInfo];
 }
 
 - (void)dismiss {
     if(self.navigationController)
-//        [self.navigationController popViewControllerAnimated:YES];
-//        [(UINavigationController *)self.navigationController.topViewController.presentedViewController popViewControllerAnimated:YES];
-        [(UINavigationController *)self.navigationController.topViewController.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+        [(UINavigationController *)self.navigationController dismissViewControllerAnimated:YES completion:nil];
     else
         [self dismissViewControllerAnimated:YES completion:nil];
-    [self reloadInfo];
 }
 
 - (void)presentPhotoEditPageWithImage:(UIImage *)image {
@@ -195,15 +212,15 @@
 //    else
 //        [self dismissViewControllerAnimated:YES completion:nil];
 //    [self reloadInfo];
-    InventoryPhotoViewController *viewController = [InventoryPhotoViewController newWithDelegate:self photo:image];
-    [viewController setAlbumPhoto:YES];
+    PhotoEditViewController *viewController = [PhotoEditViewController newWithDelegate:self photo:image];
+    
     if(self.navigationController)
         [self.navigationController pushViewController:viewController animated:NO];
     else
         [self presentViewController:viewController animated:NO completion:nil];
 }
 
-#pragma mark - TGCameraDelegate optional
+#pragma mark - IRCameraDelegate optional
 
 - (void)cameraWillTakePhoto
 {
@@ -213,6 +230,18 @@
 - (void)cameraDidSavePhotoWithError:(NSError *)error
 {
     NSLog(@"%s error: %@", __PRETTY_FUNCTION__, error);
+}
+
+#pragma mark - PhotoEditViewControllerDelegate
+- (void)didCancel {
+    NSLog(@"Did camcel.");
+}
+
+- (void)didTakePhoto:(UIImage *)image Note:(NSString *)note {
+    NSLog(@"Did take.");
+    if (_cameraDelegate && [_cameraDelegate respondsToSelector:@selector(didTakePhoto:Note:)]) {
+        [_cameraDelegate didTakePhoto:image Note:note];
+    }
 }
 
 #pragma mark - PhotoManageBrowserDelegate
@@ -231,8 +260,10 @@
 
 #pragma mark - PhotoNoteViewControllerDelegate
 
--(void)didApply {
-    [self reloadInfo];
+-(void)shouldApplyImage:(UIImage *)image Note:(NSString *)newNote Completed:(nullable IRCompletionBlock)completedBlock {
+    if (_cameraDelegate && [_cameraDelegate respondsToSelector:@selector(doUpdatePhoto:Note:Completed:)]) {
+        [_cameraDelegate doUpdatePhoto:image Note:newNote Completed:completedBlock];
+    }
 }
 
 @end

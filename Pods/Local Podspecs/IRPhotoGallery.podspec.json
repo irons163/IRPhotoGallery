@@ -17,20 +17,22 @@
     "**/*.{h,m}",
     "IRPhotoGallery/**/*.{h,m}"
   ],
-  "resource_bundles": {
-    "IRPhotoGalleryB": [
-      "**/*.xib",
-      "IRPhotoGallery/**/*.xib"
-    ]
-  },
   "dependencies": {
     "SDWebImage": [
       "~> 4.0"
+    ],
+    "IRCameraViewController": [
+
     ]
   },
-  "subspecs": [
-    {
-      "name": "IRPhotoGalleryB"
-    }
-  ]
+  "resources": [
+    "**/*.xcassets",
+    "**/*.bundle",
+    "**/*.xib",
+    "IRPhotoGallery/**/*.xib"
+  ],
+  "info_plist": {
+    "NSCameraUsageDescription": "Please allow to access your camera.",
+    "NSPhotoLibraryUsageDescription": "Please allow to access your album."
+  }
 }

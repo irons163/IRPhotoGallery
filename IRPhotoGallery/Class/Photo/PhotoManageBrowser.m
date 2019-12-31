@@ -18,9 +18,9 @@
 @end
 
 @implementation PhotoManageBrowser{
-    NSArray *_photoURLArray, *_photoNameArray;
     NSLayoutConstraint * heightConstraint;
     NSInteger currentPageIndex;
+    NSBundle *bundle;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame{
@@ -38,11 +38,7 @@
 }
 
 -(void)setup{
-//    NSString *nibName = NSStringFromClass([self class]);
-//    NSArray *views = [[NSBundle mainBundle] loadNibNamed:nibName
-//                                  owner:self
-//                                options:nil];
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    bundle = [NSBundle bundleForClass:[self class]];
     NSString *nibName = NSStringFromClass([self class]);
     NSArray *views = [bundle loadNibNamed:nibName owner:self options:nil];
     UIView *viewFromNib = [views firstObject];
@@ -70,18 +66,6 @@
     [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
     
     [self initPhotoCollectionView];
-}
-
--(BOOL)isBindedWithArray:(NSArray*)array{
-    return _photoURLArray == array;
-}
-
--(void)bindArray:(NSArray*)array{
-    _photoURLArray = array;
-}
-
--(void)bindNameArray:(NSArray*)nameArray{
-    _photoNameArray = nameArray;
 }
 
 -(void)gotoImageIndex:(NSInteger)imageIndex{
@@ -178,8 +162,8 @@
 }
 
 -(void)initPhotoCollectionView{
-    [self.photomanageCollectionView registerNib:[UINib nibWithNibName:@"PhotoManageCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoManageCollectionViewCell"];
-    [self.photomanageCollectionView registerNib:[UINib nibWithNibName:@"PhotoGalleryCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PhotoGalleryCollectionViewCell"];
+    [self.photomanageCollectionView registerNib:[UINib nibWithNibName:@"PhotoManageCollectionViewCell" bundle:bundle] forCellWithReuseIdentifier:@"PhotoManageCollectionViewCell"];
+    [self.photomanageCollectionView registerNib:[UINib nibWithNibName:@"PhotoGalleryCollectionViewCell" bundle:bundle] forCellWithReuseIdentifier:@"PhotoGalleryCollectionViewCell"];
     self.photomanageCollectionView.backgroundColor = [UIColor whiteColor];
     self.photomanageCollectionView.showsHorizontalScrollIndicator = NO;
     ((UICollectionViewFlowLayout *)self.photomanageCollectionView.collectionViewLayout).minimumInteritemSpacing = CGFLOAT_MAX;
@@ -191,29 +175,45 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return _photoURLArray.count;
+    return [_delegate numberOfPhotos];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *filePathURLString = nil;
+    UIImage *image = nil;
+    id object = [_delegate imageOrPathStringOfPhotoWithIndex:indexPath.row];
+    if(!object) {
+        NSLog(@"No Source!");
+    } else if ([object isKindOfClass:[NSString class]]) {
+        filePathURLString = object;
+    } else if([object isKindOfClass:[UIImage class]]) {
+        image = object;
+    }
+    
+    NSString *title = [_delegate titleOfPhotoWithIndex:indexPath.row];
+    
     switch (self.style) {
         case Normal:{
             PhotoManageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([PhotoManageCollectionViewCell class]) forIndexPath:indexPath];
             
-            NSString *filePathURLString = [_photoURLArray objectAtIndex:indexPath.row];
             UIImage* placeholderImage = [UIImage imageNamed:@"img_photo.jpg"];
             
-            @autoreleasepool {
-                [cell.loadingView startAnimating];
-                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
-                    
-                    if (image != NULL) {
-                        NSLog(@"Load image success.");
-                        [cell.loadingView stopAnimating];
-                    }
-                }];
+            if (filePathURLString) {
+                @autoreleasepool {
+                    [cell.loadingView startAnimating];
+                    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
+                        
+                        if (image != NULL) {
+                            NSLog(@"Load image success.");
+                            [cell.loadingView stopAnimating];
+                        }
+                    }];
+                }
+            } else {
+                [cell.imageView setImage:image];
             }
             
-            cell.nameLabel.text = [_photoNameArray objectAtIndex:indexPath.row];
+            cell.nameLabel.text = title;
             [cell changeCellStyle:NoButton];
             cell.tag = indexPath.row;
             return cell;
@@ -221,22 +221,25 @@
         case Deletable:{
             PhotoManageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([PhotoManageCollectionViewCell class]) forIndexPath:indexPath];
             
-            NSString *filePathURLString = [_photoURLArray objectAtIndex:indexPath.row];
             UIImage* placeholderImage = [UIImage imageNamed:@"img_photo.jpg"];
             
-            @autoreleasepool {
-                [cell.loadingView startAnimating];
-                [cell.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
-                    
-                    if (image != NULL) {
-                        NSLog(@"Load image success.");
-                        [cell.loadingView stopAnimating];
-                    }
-                }];
+            if (filePathURLString) {
+                @autoreleasepool {
+                    [cell.loadingView startAnimating];
+                    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
+                        
+                        if (image != NULL) {
+                            NSLog(@"Load image success.");
+                            [cell.loadingView stopAnimating];
+                        }
+                    }];
+                }
+            } else {
+                [cell.imageView setImage:image];
             }
             
             cell.delegate = self;
-            cell.nameLabel.text = [_photoNameArray objectAtIndex:indexPath.row];
+            cell.nameLabel.text = title;
             [cell.nameLabel setNumberOfLines:0];
             [cell changeCellStyle:HasButton];
             cell.tag = indexPath.row;
@@ -245,18 +248,21 @@
         case Scalable:{
             PhotoGalleryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([PhotoGalleryCollectionViewCell class]) forIndexPath:indexPath];
             
-            NSString *filePathURLString = [_photoURLArray objectAtIndex:indexPath.row];
             UIImage* placeholderImage = [UIImage imageNamed:@"img_photo.jpg"];
             
-            @autoreleasepool {
-                [cell.loadingView startAnimating];
-                [cell.photoView.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
-                    
-                    if (image != NULL) {
-                        NSLog(@"Load image success.");
-                        [cell.loadingView stopAnimating];
-                    }
-                }];
+            if (filePathURLString) {
+                @autoreleasepool {
+                    [cell.loadingView startAnimating];
+                    [cell.photoView.imageView sd_setImageWithURL:[NSURL URLWithString:filePathURLString] placeholderImage:placeholderImage options:SDWebImageProgressiveDownload | SDWebImageRetryFailed | SDWebImageCacheMemoryOnly completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL* imageURL) {
+                        
+                        if (image != NULL) {
+                            NSLog(@"Load image success.");
+                            [cell.loadingView stopAnimating];
+                        }
+                    }];
+                }
+            } else {
+                [cell.photoView.imageView setImage:image];
             }
             
             cell.tag = indexPath.row;

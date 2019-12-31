@@ -7,7 +7,6 @@
 //
 
 #import "PhotoNoteViewController.h"
-//#import "AWSNetworkManager.h"
 
 @interface PhotoNoteViewController () <UITextViewDelegate>
 
@@ -77,18 +76,20 @@
 
 #pragma mark - IBAction
 - (IBAction)clickBackButton:(id)sender {
-//    [self.currentImage cleanEditData];
     if([self.delegate respondsToSelector:@selector(willClose)])
         [self.delegate willClose];
     [self dismissViewControllerAnimated:YES completion:nil];
-//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyButtonClick:(id)sender {
     [self.noteTextView resignFirstResponder];
     [self.loadingicon startAnimating];
     self.view.userInteractionEnabled = NO;
-    [self.delegate shouldApply:editingText];
+    [self.delegate shouldApplyImage:self.currentImage Note:editingText Completed:^(BOOL success) {
+        [self.loadingicon stopAnimating];
+        self.view.userInteractionEnabled = YES;
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 #pragma mark - UITextViewDelegate

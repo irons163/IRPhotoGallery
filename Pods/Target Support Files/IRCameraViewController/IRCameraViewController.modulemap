@@ -1,0 +1,6 @@
+framework module IRCameraViewController {
+  umbrella header "IRCameraViewController-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -7,4 +7,5 @@ target 'IRPhotoGallery' do
 
   # Pods for IRPhotoGallery
   pod 'IRPhotoGallery', :path => 'IRPhotoGallery/'
+  pod 'IRCameraViewController', :path => '../IRCameraViewController/IRCameraViewController.podspec'
 end

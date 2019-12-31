@@ -32,15 +32,6 @@
         [wSelf.pageControl setCurrentPage:currentPage];
         [wSelf updateDotBorder];
     }];
-//    NSMutableArray* photoURLArray = [NSMutableArray array];
-//    NSMutableArray* photoNameArray = [NSMutableArray array];
-//    for(ImageClass* image in _photoArray){
-//        [photoURLArray addObject:image.downloadURL];
-//        [photoNameArray addObject:image.description];
-//    }
-//    [self.photoManageBrowser bindArray:photoURLArray];
-//    [self.photoManageBrowser bindNameArray:photoNameArray];
-//    [self.photoManageBrowser reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.photoManageBrowser gotoImageIndex:self.imageIndex];
     });

@@ -16,7 +16,7 @@ FOUNDATION_EXPORT const unsigned char IRPhotoGalleryVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <IRPhotoGallery/PublicHeader.h>
 
-#import <IRPhotoGallery/TGCameraViewController.h>
-#import <IRPhotoGallery/TGCamera.h>
+#import <IRPhotoGallery/PhotoManageViewController.h>
 #import <IRPhotoGallery/PhotoGalleryViewController.h>
-
+#import <IRCameraViewController/IRCamera.h>
+#import <IRCameraViewController/IRCameraColor.h>

@@ -6,11 +6,12 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://github.com/irons163/IRPhotoGallery.git"
   spec.license      = "MIT"
   spec.author       = "irons163"
-  spec.platform     = :ios, "9.0"
+  spec.platform     = :ios, "11.0"
   spec.source       = { :git => "https://github.com/irons163/IRPhotoGallery.git", :tag => spec.version.to_s }
 # spec.source       = { :path => '.' }
   spec.source_files  = "**/*.{h,m}", "IRPhotoGallery/**/*.{h,m}"
   spec.dependency 'SDWebImage', '~> 4.0'
+  spec.dependency 'IRCameraViewController'
   spec.resources = ["**/*.xcassets", "**/*.bundle", "**/*.xib", "IRPhotoGallery/**/*.xib"]
   spec.info_plist = {
     'NSCameraUsageDescription' => 'Please allow to access your camera.',

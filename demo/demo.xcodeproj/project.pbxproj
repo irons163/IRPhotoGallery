@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C55751974AB350C6A98C1F8 /* Pods_demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B49FC37D7391F4F1A99DBDE1 /* Pods_demo.framework */; };
+		8A457EC023B2F3F70077C8E7 /* demo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8A457EBE23B2F3F70077C8E7 /* demo.xcdatamodeld */; };
 		8A8BC80D22F198980069707E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BC80C22F198980069707E /* AppDelegate.m */; };
 		8A8BC81022F198980069707E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BC80F22F198980069707E /* ViewController.m */; };
 		8A8BC81322F198980069707E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A8BC81122F198980069707E /* Main.storyboard */; };
@@ -16,19 +17,9 @@
 		8AEAE5222306689200937A96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A8BC81422F1989A0069707E /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		8A579624237CED2900EF37D8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8A579620237CED2900EF37D8 /* IRPhotoGallery.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8A8BC73122EFDFAC0069707E;
-			remoteInfo = IRPhotoGallery;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		323F56E180FA494822186E5A /* Pods-demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo.debug.xcconfig"; path = "Target Support Files/Pods-demo/Pods-demo.debug.xcconfig"; sourceTree = "<group>"; };
-		8A579620237CED2900EF37D8 /* IRPhotoGallery.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IRPhotoGallery.xcodeproj; path = ../IRPhotoGallery.xcodeproj; sourceTree = "<group>"; };
+		8A457EBF23B2F3F70077C8E7 /* demo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = demo.xcdatamodel; sourceTree = "<group>"; };
 		8A8BC80822F198980069707E /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A8BC80B22F198980069707E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8A8BC80C22F198980069707E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -64,18 +55,9 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		8A579621237CED2900EF37D8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8A579625237CED2900EF37D8 /* IRPhotoGallery.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		8A8BC7FF22F198980069707E = {
 			isa = PBXGroup;
 			children = (
-				8A579620237CED2900EF37D8 /* IRPhotoGallery.xcodeproj */,
 				8A8BC80A22F198980069707E /* demo */,
 				8A8BC80922F198980069707E /* Products */,
 				7CA230C31EF87055A29A5D74 /* Pods */,
@@ -103,6 +85,7 @@
 				8A8BC81622F1989A0069707E /* LaunchScreen.storyboard */,
 				8A8BC81922F1989A0069707E /* Info.plist */,
 				8A8BC81A22F1989A0069707E /* main.m */,
+				8A457EBE23B2F3F70077C8E7 /* demo.xcdatamodeld */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -126,7 +109,7 @@
 				8A8BC80422F198980069707E /* Sources */,
 				8A8BC80522F198980069707E /* Frameworks */,
 				8A8BC80622F198980069707E /* Resources */,
-				04A77CB5B8F987729D95F323 /* [CP] Embed Pods Frameworks */,
+				1CEB4970293FE493D0CD925C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -162,28 +145,12 @@
 			mainGroup = 8A8BC7FF22F198980069707E;
 			productRefGroup = 8A8BC80922F198980069707E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 8A579621237CED2900EF37D8 /* Products */;
-					ProjectRef = 8A579620237CED2900EF37D8 /* IRPhotoGallery.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8A8BC80722F198980069707E /* demo */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		8A579625237CED2900EF37D8 /* IRPhotoGallery.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = IRPhotoGallery.framework;
-			remoteRef = 8A579624237CED2900EF37D8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8A8BC80622F198980069707E /* Resources */ = {
@@ -199,7 +166,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		04A77CB5B8F987729D95F323 /* [CP] Embed Pods Frameworks */ = {
+		1CEB4970293FE493D0CD925C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -245,6 +212,7 @@
 			files = (
 				8A8BC81022F198980069707E /* ViewController.m in Sources */,
 				8A8BC81B22F1989A0069707E /* main.m in Sources */,
+				8A457EC023B2F3F70077C8E7 /* demo.xcdatamodeld in Sources */,
 				8A8BC80D22F198980069707E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,6 +359,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F7AP32ZTM5;
 				INFOPLIST_FILE = demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,6 +378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F7AP32ZTM5;
 				INFOPLIST_FILE = demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -441,6 +411,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8A457EBE23B2F3F70077C8E7 /* demo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8A457EBF23B2F3F70077C8E7 /* demo.xcdatamodel */,
+			);
+			currentVersion = 8A457EBF23B2F3F70077C8E7 /* demo.xcdatamodel */;
+			path = demo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 8A8BC80022F198980069707E /* Project object */;
 }

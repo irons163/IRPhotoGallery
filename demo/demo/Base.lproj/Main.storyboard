@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="W1X-Kb-ujK">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="W1X-Kb-ujK">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,16 +33,25 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9b-ke-J4W">
                                 <rect key="frame" x="184" y="144" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="demo1"/>
                                 <connections>
                                     <action selector="demoButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3S3-pm-jvZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QA1-Gx-Dc2">
+                                <rect key="frame" x="183" y="214" width="48" height="30"/>
+                                <state key="normal" title="demo2"/>
+                                <connections>
+                                    <action selector="demo2ButtonClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1zQ-nu-m6F"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="QA1-Gx-Dc2" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="CQO-gT-uND"/>
                             <constraint firstItem="l9b-ke-J4W" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="KJI-Ff-NLR"/>
                             <constraint firstItem="l9b-ke-J4W" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="hHo-it-vtI"/>
+                            <constraint firstItem="QA1-Gx-Dc2" firstAttribute="top" secondItem="l9b-ke-J4W" secondAttribute="bottom" constant="40" id="oFO-NP-VMy"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -52,6 +59,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-849" y="143"/>
         </scene>
     </scenes>
 </document>

@@ -41,9 +41,6 @@ typedef void(^EditClickBlock)(NSInteger index);
 @property (nonatomic, copy) DeleteClickBlock deleteClickBlock;
 @property (nonatomic, copy) EditClickBlock editClickBlock;
 
-- (BOOL)isBindedWithArray:(NSArray*)array;
-- (void)bindArray:(NSArray*)array;
-- (void)bindNameArray:(NSArray*)nameArray;
 - (void)gotoImageIndex:(NSInteger)imageIndex;
 - (void)reloadData;
 - (void)reloadDataWithCompletion:(void (^)(void))completionBlock;

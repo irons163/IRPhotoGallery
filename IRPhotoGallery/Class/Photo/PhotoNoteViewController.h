@@ -7,18 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "ImageClass.h"
+#import "PhotoCallback.h"
 
 @protocol PhotoNoteViewControllerDelegate <NSObject>
-- (void)shouldApply:(NSString*)newNote;
+- (void)shouldApplyImage:(UIImage * _Nullable)image Note:(NSString*_Nullable)newNote Completed:(nullable IRCompletionBlock)completedBlock;
 @optional
 - (void)willClose;
 @end
 
 @interface PhotoNoteViewController : UIViewController
 
-@property (weak) id<PhotoNoteViewControllerDelegate> delegate;
-//@property (nonatomic,weak) ImageClass* currentImage;
-@property NSString* note;
+@property (weak, nullable) id<PhotoNoteViewControllerDelegate> delegate;
+@property (weak, nullable) UIImage *currentImage;
+@property (weak, nullable) NSString *note;
 
 @end
