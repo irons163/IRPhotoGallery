@@ -62,6 +62,20 @@ photoManageBrowser.delegate = self;
 [self.view addSubview:photoManageBrowser];
 ```
 
+- PhotoManageBrowserStyle
+|PhotoManageViewController | Normal | Deletable | Scalable |
+
+```objc
+[photoManageBrowser setStyle:Normal];
+```
+
+- PhotoManageBrowserStyle
+|PhotoManageBrowserScrollDirection | ScrollDirectionVertical | ScrollDirectionHorizontal |
+
+```objc
+[photoManageBrowser setDirection:ScrollDirectionHorizontal];
+```
+
 - Delegates
 ```objc
 #pragma mark - PhotoManageBrowserDelegate
