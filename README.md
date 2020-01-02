@@ -24,115 +24,118 @@
 - Copy this project into your own project.
 - Add the .xcodeproj into you  project and link it as embed framework.
 #### Options
-- You can remove the `ScreenShots` folder.
+- You can remove the `demo` and `ScreenShots` folder.
 
 ### Cocoapods
-- Not support yet.
+- Add `pod 'IRPhotoGallery'`  in the `Podfile`
+- `pod install`
 
 ## Usage
 
 ### Basic
 
-- Implement from codes:
-
+- Use `PhotoManageViewController`, it include multi parts: Gallery, Preview, Camera, Album, Filters, etc... 
 ```obj-c
-    self.tableView = [[BranchTableIView alloc] init];
-    self.tableView.delegate = self;
-    
-    Device *devicebranch1 = [[Device alloc] init];
-    devicebranch1.name = @"branch1";
-    Device *devicebranch2 = [[Device alloc] init];
-    devicebranch2.name = @"branch2";
-    Device *devicebranch3 = [[Device alloc] init];
-    devicebranch3.name = @"branch3";
-    Device *devicebranch4 = [[Device alloc] init];
-    devicebranch4.name = @"branch4";
-    Device *devicebranch5 = [[Device alloc] init];
-    devicebranch5.name = @"branch5";
-    Device *deviceleaf = [[Device alloc] init];
-    deviceleaf.name = @"leaf";
-    Device *deviceleaf2 = [[Device alloc] init];
-    deviceleaf2.name = @"leaf2";
-    Device *deviceleaf3 = [[Device alloc] init];
-    deviceleaf3.name = @"leaf3";
-    Device *deviceleaf4 = [[Device alloc] init];
-    deviceleaf4.name = @"leaf4";
-    Device *deviceleaf5 = [[Device alloc] init];
-    deviceleaf5.name = @"leaf5";
-    Device *deviceleaf6 = [[Device alloc] init];
-    deviceleaf6.name = @"leaf6";
-    Device *deviceleaf7 = [[Device alloc] init];
-    deviceleaf7.name = @"leaf7";
-    Device *deviceleaf8 = [[Device alloc] init];
-    deviceleaf8.name = @"leaf8";
-    Device *deviceleaf9 = [[Device alloc] init];
-    deviceleaf9.name = @"leaf9";
-    Device *deviceleaf10 = [[Device alloc] init];
-    deviceleaf10.name = @"leaf10";
-    Device *deviceleaf11 = [[Device alloc] init];
-    deviceleaf11.name = @"leaf11";
-    Device *deviceleaf12 = [[Device alloc] init];
-    deviceleaf12.name = @"leaf12";
-    
-    branch = [[Branch alloc] initWithTableView:self.tableView];
-    Branch *branch1 = [[Branch alloc] initWithDevice:devicebranch1];
-    Branch *branch2 = [[Branch alloc] initWithDevice:devicebranch2];
-    Branch *branch3 = [[Branch alloc] initWithDevice:devicebranch3];
-    Branch *branch4 = [[Branch alloc] initWithDevice:devicebranch4];
-    Branch *branch5 = [[Branch alloc] initWithDevice:devicebranch5];
-    Leaf *leaf = [[Leaf alloc] initWithDevice:deviceleaf];
-    Leaf *leaf2 = [[Leaf alloc] initWithDevice:deviceleaf2];
-    Leaf *leaf3 = [[Leaf alloc] initWithDevice:deviceleaf3];
-    Leaf *leaf4 = [[Leaf alloc] initWithDevice:deviceleaf4];
-    Leaf *leaf5 = [[Leaf alloc] initWithDevice:deviceleaf5];
-    Leaf *leaf6 = [[Leaf alloc] initWithDevice:deviceleaf6];
-    Leaf *leaf7 = [[Leaf alloc] initWithDevice:deviceleaf7];
-    Leaf *leaf8 = [[Leaf alloc] initWithDevice:deviceleaf8];
-    Leaf *leaf9 = [[Leaf alloc] initWithDevice:deviceleaf9];
-    Leaf *leaf10 = [[Leaf alloc] initWithDevice:deviceleaf10];
-    Leaf *leaf11 = [[Leaf alloc] initWithDevice:deviceleaf11];
-    Leaf *leaf12 = [[Leaf alloc] initWithDevice:deviceleaf12];
-    
-    FunctionModelBranchItem *branchItem = [[FunctionModelBranchItem alloc] initWithRowCount:1];
-    [model addItem:branchItem];
-    [branch add:leaf];
-    [branch add:branch1];
-    [branch add:leaf2];
-    [branch1 add:branch2];
-    [branch1 add:leaf3];
-    [branch1 add:leaf4];
-    [branch2 add:leaf5];
-    [branch2 add:leaf6];
-    [branch2 add:branch3];
-    [branch3 add:leaf7];
-    [branch3 add:leaf8];
-    [branch2 add:branch4];
-    [branch4 add:leaf9];
-    [branch2 add:branch5];
-    [branch5 add:leaf10];
-    [branch5 add:leaf11];
-    [branch5 add:leaf12];
-    
-    [self.view addSubview:self.tableView];
+NSBundle *bundle = [NSBundle bundleForClass:[PhotoManageViewController class]];
+photoManageViewController = [[PhotoManageViewController alloc] initWithNibName:@"PhotoManageViewController" bundle:bundle];
+photoManageViewController.delegate = self;
+photoManageViewController.cameraDelegate = self;
+[IRCameraColor setTintColor: [UIColor whiteColor]];
+
+[self.navigationController pushViewController:photoManageViewController animated:YES];
 ```
 
-- Implement from UI: Make a UITableView extand class with `BranchTableIView`.
+- Use `PhotoManageBrowser`, it just a gallery view
+```objc
+photoManageBrowser = [[PhotoManageBrowser alloc] init];
+[photoManageBrowser setStyle:Normal];
+[photoManageBrowser setDirection:ScrollDirectionHorizontal];
+__weak ViewController* wSelf = self;
+[photoManageBrowser setItemSelectedBlock:^(NSIndexPath *indexPath) {
+    NSBundle *bundle = [NSBundle bundleForClass:[PhotoGalleryViewController class]];
+    PhotoGalleryViewController* photoGalleryViewController = [[PhotoGalleryViewController alloc] initWithNibName:@"PhotoGalleryViewController" bundle:bundle];
+    photoGalleryViewController.delegate = wSelf;
+    photoGalleryViewController.imageIndex = indexPath.row;
+    [wSelf presentViewController:photoGalleryViewController animated:YES completion:nil];
+}];
+photoManageBrowser.delegate = self;
+[self.view addSubview:photoManageBrowser];
+```
+
+- Delegates
+```objc
+#pragma mark - PhotoManageBrowserDelegate
+- (NSUInteger)numberOfPhotos {
+    return photos.count;
+}
+
+- (NSString *)titleOfPhotoWithIndex:(NSInteger)index {
+    return [photos objectAtIndex:index].note;
+}
+
+- (id)imageOrPathStringOfPhotoWithIndex:(NSInteger)index {
+    
+    return [images objectAtIndex:index];
+}
+
+#pragma mark - CameraViewControllerDelegate
+- (void)didTakePhoto:(UIImage *)image Note:(NSString *)note {
+    Photo *photo = [NSEntityDescription insertNewObjectForEntityForName:@"Photo" inManagedObjectContext:context];
+    photo.photo = UIImagePNGRepresentation(image);
+    photo.note = note;
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    [self reloadPhotos];
+    [photoManageViewController reloadUI];
+}
+
+- (void)doUpdatePhoto:(UIImage *)image Note:(NSString *)note Completed:(nullable IRCompletionBlock)completedBlock {
+    [photoManageViewController showLoading:YES];
+    NSInteger index = [images indexOfObject:image];
+    Photo *photo = [photos objectAtIndex:index];
+    photo.photo = UIImagePNGRepresentation(image);
+    photo.note = note;
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    if (completedBlock) {
+        completedBlock(YES);
+    }
+    [photoManageViewController reloadUI];
+    [photoManageViewController showLoading:NO];
+}
+
+- (void)doDeletePhoto:(UIImage *)image {
+    NSInteger index = [images indexOfObject:image];
+    Photo *photo = [photos objectAtIndex:index];
+    [context deleteObject:photo];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    [self reloadPhotos];
+    [photoManageViewController reloadUI];
+}
+```
 
 ### Advanced settings
 
-IRHierarchyTreeTableView can nice combine with another powerful tableview/collectionview framework:[IRCollectionTableViewModel](https://github.com/irons163/IRCollectionTableViewModel).
+- Customize functions of  `PhotoManageBrowser`, 4 blocks let you override the default feature
+```objc
+@property (nonatomic, copy) CurrentPageChangedBlock currentPageChangedBlock;
+@property (nonatomic, copy) ItemSelectedBlock itemSelectedBlock;
+@property (nonatomic, copy) DeleteClickBlock deleteClickBlock;
+@property (nonatomic, copy) EditClickBlock editClickBlock;
+```
 
-- Sample as below, you can customize your ViewModel:
+- Use `PhotoGalleryViewController`, it is a simple gallery view controller
 ```obj-c
-    self.tableView = [[BranchTableIView alloc] init];
-    model = [[Model alloc] init];
-    model.delegate = self;
-    self.tableView.dataSource = model;
+NSBundle *bundle = [NSBundle bundleForClass:[PhotoGalleryViewController class]];
+PhotoGalleryViewController* photoGalleryViewController = [[PhotoGalleryViewController alloc] initWithNibName:@"PhotoGalleryViewController" bundle:bundle];
+photoGalleryViewController.delegate = wSelf;
+photoGalleryViewController.imageIndex = indexPath.row;
+[wSelf presentViewController:photoGalleryViewController animated:YES completion:nil];
 ```
 
 ## Screenshots
-| Demo1 | Demo2 |
+| PhotoManageViewController | PhotoManageBrowser |
 |:---:|:---:|
-|![Demo1](./ScreenShots/demo1.png)|![Demo2](./ScreenShots/demo2.png)| 
-| Demo3 | Demo4 |
-|![Demo3](./ScreenShots/demo3.png)|![Demo4](./ScreenShots/demo4.png)| 
+|![PhotoManageViewController](./ScreenShots/demo1.png)|![PhotoManageBrowser](./ScreenShots/demo2.png)| 
+| Camera | Album |
+|![Camera](./ScreenShots/demo3.png)|![Album](./ScreenShots/demo4.png)| 
+| PhotoGalleryViewController | Full Screen Gallery |
+|![PhotoGalleryViewController](./ScreenShots/demo5.png)|![Full Screen Gallery](./ScreenShots/demo6.png)| 

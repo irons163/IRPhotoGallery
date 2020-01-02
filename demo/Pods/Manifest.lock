@@ -1,31 +1,26 @@
 PODS:
   - IRCameraViewController (1.0.0)
-  - IRPhotoGallery (1.0.0):
+  - IRPhotoGallery (1.0.1):
     - IRCameraViewController
     - SDWebImage (~> 4.0)
-  - SDWebImage (4.4.7):
-    - SDWebImage/Core (= 4.4.7)
-  - SDWebImage/Core (4.4.7)
+  - SDWebImage (4.4.8):
+    - SDWebImage/Core (= 4.4.8)
+  - SDWebImage/Core (4.4.8)
 
 DEPENDENCIES:
-  - IRCameraViewController (from `../../IRCameraViewController/IRCameraViewController.podspec`)
-  - IRPhotoGallery (from `../IRPhotoGallery/`)
+  - IRPhotoGallery
 
 SPEC REPOS:
   trunk:
+    - IRCameraViewController
+    - IRPhotoGallery
     - SDWebImage
-
-EXTERNAL SOURCES:
-  IRCameraViewController:
-    :path: "../../IRCameraViewController/IRCameraViewController.podspec"
-  IRPhotoGallery:
-    :path: "../IRPhotoGallery/"
 
 SPEC CHECKSUMS:
   IRCameraViewController: b82e98591047eb0b70040a9c0a4a39c5b576f7d2
-  IRPhotoGallery: ee1eada4d63b5798e125f9f2629bda27f6c74cea
-  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
+  IRPhotoGallery: 9a45038482b882d61f54c6abe16b735807f7c7d6
+  SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
 
-PODFILE CHECKSUM: 395475fce5ad4f53094b83c0921a7ecccce0a133
+PODFILE CHECKSUM: 353d8919bb3528de0c720b996a7fd5a16b9afb1c
 
 COCOAPODS: 1.8.0.beta.2
