@@ -63,14 +63,23 @@ photoManageBrowser.delegate = self;
 ```
 
 - PhotoManageBrowserStyle
-|PhotoManageViewController | Normal | Deletable | Scalable |
+
+|PhotoManageViewController |
+|:---:|
+| Normal |
+| Deletable |
+| Scalable |
 
 ```objc
 [photoManageBrowser setStyle:Normal];
 ```
 
 - PhotoManageBrowserStyle
-|PhotoManageBrowserScrollDirection | ScrollDirectionVertical | ScrollDirectionHorizontal |
+
+|PhotoManageBrowserScrollDirection |
+|:---:|
+| ScrollDirectionVertical |
+|ScrollDirectionHorizontal |
 
 ```objc
 [photoManageBrowser setDirection:ScrollDirectionHorizontal];
