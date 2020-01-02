@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "IRPhotoGallery"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "Make a Button Group to control."
   spec.description  = "Make a Button Group to control."
   spec.homepage     = "https://github.com/irons163/IRPhotoGallery.git"
@@ -9,10 +9,10 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "11.0"
   spec.source       = { :git => "https://github.com/irons163/IRPhotoGallery.git", :tag => spec.version.to_s }
 # spec.source       = { :path => '.' }
-  spec.source_files  = "**/*.{h,m}", "IRPhotoGallery/**/*.{h,m}"
+  spec.source_files  = "IRPhotoGallery/**/*.{h,m}"
   spec.dependency 'SDWebImage', '~> 4.0'
   spec.dependency 'IRCameraViewController'
-  spec.resources = ["**/*.xcassets", "**/*.bundle", "**/*.xib", "IRPhotoGallery/**/*.xib"]
+  spec.resources = ["IRPhotoGallery/**/*.xib"]
   spec.info_plist = {
     'NSCameraUsageDescription' => 'Please allow to access your camera.',
     'NSPhotoLibraryUsageDescription' => 'Please allow to access your album.'
